@@ -1,0 +1,11 @@
+../TCPP/App/app_tcpp.c:48:6:MX_TCPP_Init	1
+../TCPP/App/app_tcpp.c:63:6:MX_TCPP_Process	1
+../TCPP/App/app_tcpp.c:73:13:USBnoPD_StateMachineRun	44
+../TCPP/App/app_tcpp.c:286:17:USBnoPD_TCPP0203_ConvertADCDataToVoltage	4
+../TCPP/App/app_tcpp.c:323:16:USBnoPD_TCPP0203_ConvertADCDataToCurrent	3
+../TCPP/App/app_tcpp.c:347:6:USBnoPD_ProcessADC	2
+../TCPP/App/app_tcpp.c:372:6:USBnoPD_IncrementDebounceCount	1
+../TCPP/App/app_tcpp.c:382:6:USBnoPD_TCPPFaultHandling	1
+../TCPP/App/app_tcpp.c:392:6:HAL_GPIO_EXTI_Callback	1
+../TCPP/App/app_tcpp.c:402:6:HAL_TIM_PeriodElapsedCallback	1
+../TCPP/App/app_tcpp.c:410:6:HAL_ADC_ConvCpltCallback	1
