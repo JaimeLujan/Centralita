@@ -20,8 +20,7 @@
 /* Check DMA Usage */
 
 /* Check same ADC for all */
-#error All Channels must belong to the same ADC
-#error All Channels must belong to the same ADC
+
 /* Common ADC for All 3(SRC) or 4(DRP) Channels :  */
 #define	ADC_INSTANCE
 
@@ -34,8 +33,11 @@
 #define ADC_DMA
 #define ADC_DMA_CHANNEL
 
-extern ADC_HandleTypeDef            h;
-extern DMA_HandleTypeDef            hdma_;
+extern ADC_HandleTypeDef            hadc1;
+extern ADC_HandleTypeDef            hadc2;
+extern DMA_HandleTypeDef            handle_GPDMA1_Channel0;
+extern DMA_HandleTypeDef            handle_GPDMA1_Channel1;
+
 
 /**
   *
@@ -46,6 +48,7 @@ void ADC_Channels_Init(void)
   ADC_ChannelConfTypeDef sConfig;
    /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time.
   */
+  /*
   sConfig.Channel = ADC_CC1_CHANNEL;
   sConfig.Rank = 1;
   sConfig.SamplingTime = LL_ADC_GetChannelSamplingTime(,1);
@@ -55,22 +58,31 @@ void ADC_Channels_Init(void)
   sConfig.Rank = 2;
   HAL_ADC_ConfigChannel(&h, &sConfig);
 
+  sConfig.Channel = ADC_VPROV_NOPD_CHANNEL;
+    sConfig.Rank = 5;
+    HAL_ADC_ConfigChannel(&h, &sConfig);
+*/
   sConfig.Channel = ADC_VBUS_NOPD_CHANNEL;
-  sConfig.Rank = 3;
-  HAL_ADC_ConfigChannel(&h, &sConfig);
+  sConfig.SamplingTime = LL_ADC_SAMPLINGTIME_24CYCLES_5;
+  sConfig.Rank = 1;
+  HAL_ADC_ConfigChannel(&hadc1, &sConfig);
+  //HAL_ADCEx_MultiModeConfigChannel(hadc, pMultimode)
 
   sConfig.Channel = ADC_ISENSE_NOPD_CHANNEL;
-  sConfig.Rank = 4;
-  HAL_ADC_ConfigChannel(&h, &sConfig);
+  sConfig.SamplingTime = LL_ADC_SAMPLINGTIME_24CYCLES_5;
+  sConfig.Rank = 1;
+  HAL_ADC_ConfigChannel(&hadc2, &sConfig);
 
-  sConfig.Channel = ADC_VPROV_NOPD_CHANNEL;
-  sConfig.Rank = 5;
-  HAL_ADC_ConfigChannel(&h, &sConfig);
+
 }
 
 void ADC_Start(void)
 {
-  HAL_ADC_Start_DMA(&h,(uint32_t *)&USBnoPD_adc_buffer, USBNOPD_ADC_USED_CHANNELS);
+  //HAL_ADC_Start_DMA(&h,(uint32_t *)&USBnoPD_adc_buffer, USBNOPD_ADC_USED_CHANNELS);
+	HAL_ADCEx_Calibration_Start(&hadc1, ADC_SINGLE_ENDED);
+	HAL_ADCEx_Calibration_Start(&hadc2, ADC_SINGLE_ENDED);
+	HAL_ADC_Start(&hadc2);
+	HAL_ADCEx_MultiModeStart_DMA(&hadc1, (uint32_t *)&USBnoPD_adc_buffer, USBNOPD_ADC_USED_CHANNELS);
 }
 
 /**
